@@ -41,9 +41,38 @@ public class AssociationEdgeMult extends ClassRelationshipEdge
 	 */
 	public enum Directionality 
 	{None, Start, End, Both}
+	public enum Mult {
+		NONE(""),
+	    ONE("1"),
+	    ZERO_ONE("0..1"),
+	    ONEMANY("1..n"),
+	    ZEROMANY("0..n"),
+	    ;
+
+	    private final String text;
+
+	    /**
+	     * @param text
+	     */
+	    private Mult(final String text) {
+	        this.text = text;
+	    }
+
+	    /* (non-Javadoc)
+	     * @see java.lang.Enum#toString()
+	     */
+	    @Override
+	    public String toString() {
+	        return text;
+	    }
+	}
 	
-	private MultiLineString aAttributes;
+	
+	
+	//private MultiLineString aAttributes;
 	private Directionality aDirectionality = Directionality.None;
+	private Mult aLeftMult = Mult.NONE;
+	private Mult aRightMult = Mult.NONE;
 	
 	/**
 	 * Creates an association edge with no labels.
@@ -51,15 +80,32 @@ public class AssociationEdgeMult extends ClassRelationshipEdge
 	 */
 	public AssociationEdgeMult()
 	{
-		aAttributes = new MultiLineString();
+		//aAttributes = new MultiLineString();
 	}
-	public void setAttributes(MultiLineString pNewValue)
+	/*public void setAttributes(MultiLineString pNewValue)
 	{
 		aAttributes = pNewValue;
 	}
 	public MultiLineString getAttributes()
 	{
 		return aAttributes;
+	}*/
+	
+	public void setLeftMult( Mult pLeftMult){
+		aLeftMult = pLeftMult;
+		this.setEndLabel(aLeftMult.text);
+		
+	}
+	public Mult getLeftMult(){
+		return aLeftMult;
+	}
+	
+	public void setRightMult( Mult pRightMult){
+		aRightMult = pRightMult;
+		this.setStartLabel(aRightMult.text);
+	}
+	public Mult getRightMult(){
+		return aRightMult;
 	}
 	
 	/**

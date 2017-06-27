@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
 
 import ca.mcgill.cs.stg.jetuml.graph.AggregationEdge;
 import ca.mcgill.cs.stg.jetuml.graph.AssociationEdge;
+import ca.mcgill.cs.stg.jetuml.graph.AssociationEdgeMult;
 import ca.mcgill.cs.stg.jetuml.graph.ChildNode;
 import ca.mcgill.cs.stg.jetuml.graph.ClassNode;
 import ca.mcgill.cs.stg.jetuml.graph.DependencyEdge;
@@ -56,7 +57,8 @@ public class ClassDiagramGraph extends Graph
 															  new AssociationEdge(),
 															  new AggregationEdge(),
 															  new AggregationEdge(AggregationEdge.Type.Composition),
-															  new NoteEdge()};
+															  new NoteEdge(),
+															  new AssociationEdgeMult()};
 
 	@Override
 	public Node[] getNodePrototypes()
