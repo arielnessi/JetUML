@@ -39,6 +39,9 @@ public final class PropertyOrder
 		INSTANCE.addIndex(ClassRelationshipEdge.class, "startLabel", 1);
 		INSTANCE.addIndex(ClassRelationshipEdge.class, "middleLabel", 2);
 		INSTANCE.addIndex(ClassRelationshipEdge.class, "endLabel", 3);
+		INSTANCE.addIndex(AssociationEdgeMult.class, "startMult", 1);
+		INSTANCE.addIndex(AssociationEdgeMult.class, "endMult", 2);
+		INSTANCE.addIndex(AssociationEdgeMult.class, "directionality", 3);
 		INSTANCE.addIndex(CallEdge.class, "middleLabel", 1);
 		INSTANCE.addIndex(ClassNode.class, "name", 1);
 		INSTANCE.addIndex(ClassNode.class, "attributes", 2);

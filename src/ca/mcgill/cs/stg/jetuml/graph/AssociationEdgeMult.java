@@ -66,13 +66,15 @@ public class AssociationEdgeMult extends ClassRelationshipEdge
 	        return text;
 	    }
 	}
+	private Node startNode;
+	private Node endNode;
 	
 	
 	
 	//private MultiLineString aAttributes;
 	private Directionality aDirectionality = Directionality.None;
-	private Mult aLeftMult = Mult.NONE;
-	private Mult aRightMult = Mult.NONE;
+	private Mult aStartMult = Mult.NONE;
+	private Mult aEndMult = Mult.NONE;
 	
 	/**
 	 * Creates an association edge with no labels.
@@ -80,32 +82,58 @@ public class AssociationEdgeMult extends ClassRelationshipEdge
 	 */
 	public AssociationEdgeMult()
 	{
-		//aAttributes = new MultiLineString();
+		this.startNode = null;
+		this.endNode = null;
 	}
-	/*public void setAttributes(MultiLineString pNewValue)
-	{
-		aAttributes = pNewValue;
-	}
-	public MultiLineString getAttributes()
-	{
-		return aAttributes;
-	}*/
-	
-	public void setLeftMult( Mult pLeftMult){
-		aLeftMult = pLeftMult;
-		this.setEndLabel(aLeftMult.text);
+		
+	public void setStartMult( Mult pStartMult){
+		aStartMult = pStartMult;
+		if(pStartMult != Mult.ZERO_ONE && pStartMult != Mult.ZEROMANY && pStartMult != Mult.NONE){
+			this.addAttribute(endNode,startNode);
+		}
+		else{
+			removeAttribute(endNode,startNode);
+		}
+		this.setStartLabel(aStartMult.text);
 		
 	}
-	public Mult getLeftMult(){
-		return aLeftMult;
+	public Mult getStartMult(){
+		return aStartMult;
 	}
 	
-	public void setRightMult( Mult pRightMult){
-		aRightMult = pRightMult;
-		this.setStartLabel(aRightMult.text);
+	public void setEndMult( Mult pEndMult){
+		aEndMult = pEndMult;
+		if(pEndMult != Mult.ZERO_ONE && pEndMult != Mult.ZEROMANY && pEndMult != Mult.NONE){
+			this.addAttribute(startNode,endNode);
+		}
+		else{
+			removeAttribute(startNode,endNode);
+		}
+		this.setEndLabel(aEndMult.text);
 	}
-	public Mult getRightMult(){
-		return aRightMult;
+	public Mult getEndMult(){
+		return aEndMult;
+	}
+	
+	private void addAttribute(Node target, Node reference){
+		ClassNode targetClass = (ClassNode) target;
+		ClassNode referenceClass = (ClassNode) reference;
+		if(!targetClass.getAttributes().getText().contains((CharSequence) referenceClass.getName().getText())){
+			MultiLineString newVal = new MultiLineString();
+			newVal.setText(targetClass.getAttributes().getText() + "\n" + referenceClass.getName() + " var" + referenceClass.getName());
+			targetClass.setAttributes(newVal);
+		}
+	}
+	
+	private void removeAttribute(Node target, Node reference){
+		ClassNode targetClass = (ClassNode) target;
+		ClassNode referenceClass = (ClassNode) reference;
+		if(targetClass.getAttributes().getText().contains((CharSequence) referenceClass.getName().getText())){
+			MultiLineString newVal = new MultiLineString();
+			newVal.setText(targetClass.getAttributes().getText().replaceAll(
+					referenceClass.getName().getText() + " var" + referenceClass.getName().getText(), ""));
+			targetClass.setAttributes(newVal);
+		}
 	}
 	
 	/**
@@ -154,6 +182,16 @@ public class AssociationEdgeMult extends ClassRelationshipEdge
 	public SegmentationStyle obtainSegmentationStyle()
 	{
 		return SegmentationStyleFactory.createHVHStrategy();
+	}
+	
+	@Override
+	public void connect(Node pStart, Node pEnd, Graph pGraph)
+	{
+		super.connect(pStart, pEnd, pGraph);
+		assert pStart instanceof ClassNode;
+		assert pEnd instanceof ClassNode;
+		startNode = pStart;
+		endNode = pEnd;
 	}
 }
 
